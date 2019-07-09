@@ -1,0 +1,41 @@
+body{
+  font-family: sans-serif;
+  margin:20px;
+  background: whitesmoke;
+}
+code{
+  font-size: 16px;
+  background: whitesmoke;
+  border: 1px solid gainsboro;
+  border-radius: 3px;
+}
+button{
+  font-size: 16px;
+  background: whitesmoke;
+  border: 1px solid silver;
+  cursor:pointer;
+}
+button:hover{
+  background: gainsboro;
+}
+button:focus { outline: none; }
+
+input:focus{
+  outline: 1px solid darkred;
+}
+
+.apidoc-cell-head:hover{
+  text-decoration:underline;
+  cursor:pointer;
+}
+
+.apidoc-cell-head:hover::before{
+  content: "¶";
+  margin-left:-24px;
+  width:24px;
+  display:inline-block;
+}
+
+a{
+  color:black
+}
