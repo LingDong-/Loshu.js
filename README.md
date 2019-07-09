@@ -8,7 +8,7 @@
 
 *Loshu.js* is a linear algebra library for JavaScript.
 It not only provides convienient manipulation of matrices and vectors,
-but is also capable of more advanced operations such **matrix decompositions**,
+but is also capable of more advanced operations such as **matrix decompositions**,
 **eigenvalue and vectors**, **solution and approximation to linear systems**, and many more!
 
 (Optionally) accelerated using [WebAssembly](https://webassembly.org/).
