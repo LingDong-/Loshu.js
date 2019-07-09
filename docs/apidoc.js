@@ -168,7 +168,7 @@ function newDoc(apidoc){
 }
 
 function newNav(){
-  return `<button onclick="window.location.href='https://github.com/LingDong-/Loshu.js'">Github</button>&nbsp;<button onclick="window.location.href='/'">Online REPL</button>`
+  return `<button onclick="window.location.href='https://github.com/LingDong-/Loshu.js'">Github</button>&nbsp;<button onclick="window.location.href='./'">Online REPL</button>`
 }
 
 

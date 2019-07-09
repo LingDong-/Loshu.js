@@ -185,7 +185,7 @@ function newIn(txt){
 
 
 function newNav(){
-  document.getElementById("nav").innerHTML = `<button onclick="window.location.href='https://github.com/LingDong-/Loshu.js'">Github</button>&nbsp;<button onclick="window.location.href='/apidoc.html'">API Documentation</button>`
+  document.getElementById("nav").innerHTML = `<button onclick="window.location.href='https://github.com/LingDong-/Loshu.js'">Github</button>&nbsp;<button onclick="window.location.href='./apidoc.html'">API Documentation</button>`
 }
 
 function newRef(){

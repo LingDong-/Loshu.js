@@ -1,12 +1,12 @@
 <img src="https://cdn.glitch.com/4ccedd07-e2b9-4ccf-9add-44a186608f08%2Floshu-logo-small.png?v=1562646290711" width="150" align="right" />
 
-# loshu.js 
+# Loshu.js 
 
 ### Linear Algebra for Javascript
 
 #### [Online REPL](https://loshu.glitch.me) | [API Reference](https://loshu.glitch.me/apidoc.html)
 
-*loshu.js* is a linear algebra library for JavaScript.
+*Loshu.js* is a linear algebra library for JavaScript.
 It not only provides convienient manipulation of matrices and vectors,
 but is also capable of more advanced operations such **matrix decompositions**,
 **eigenvalue and vectors**, **solution and approximation to linear systems**, and many more!
