@@ -4,7 +4,7 @@
       "In <i>loshu.js</i>, a vector is expressed as a plain javascript array, e.g. `[1,2,3]`, and a matrix is simply an array of arrays, in row-major format. e.g. `[[1,2,3],[4,5,6],[7,8,9]]`.",
       "the library follows a \"functional\" paradigm, i.e. functions do not modify inputs and objects do not have methods themselves.",
       "all the functions in the library are under the namespace `LOSHU`, or `lo` in shorthand (e.g. `lo.add(A,B)`), though for the rest of this document the prefix will be ommited for conciseness.",
-      "some functions (marked with [wasm]) are also implemented in C++ and ported to web assembly, for (around <b>100x</b>) speed boosts. for how to enable wasm mode (and how to get started in general) please consult the README."
+      "some functions (marked with [wasm]) are also implemented in C++ and ported to web assembly, for (around <b>100x</b>) speed boosts. for how to enable wasm mode (and how to get started in general) please consult the <a href=\"https://github.com/LingDong-/Loshu.js/blob/master/README.md\">README</a>."
     ],
     "opt":{
       "assertionlvl" : "assertion level. one of `ASSERTION_NONE`, `ASSERTION_WARN`, `ASSERTION_DEFAULT`, `ASSERTION_THROW`. functions can optionally do basic typechecks on the input, and give different types of response (specified by this option) when a problem is found. set to `ASSERTION_NONE` to disable the feature (and optimise for speed). default is `ASSERTION_DEFAULT`",
