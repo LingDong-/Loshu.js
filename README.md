@@ -1,4 +1,4 @@
-<img src="https://cdn.glitch.com/4ccedd07-e2b9-4ccf-9add-44a186608f08%2Floshu-logo-small.png?v=1562646290711" align="right" />
+<img src="https://cdn.glitch.com/4ccedd07-e2b9-4ccf-9add-44a186608f08%2Floshu-logo-small.png?v=1562646290711" width="150" align="right" />
 
 # loshu.js 
 
