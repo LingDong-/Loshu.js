@@ -1,7 +1,7 @@
 {
   ":overview": {
     "desc":[
-      "In <i>loshu.js</i>, a vector is expressed as a plain javascript array, e.g. `[1,2,3]`, and a matrix is simply an array of arrays, in row-major format. e.g. `[[1,2,3],[4,5,6],[7,8,9]]`.",
+      "In <i>Loshu.js</i>, a vector is expressed as a plain javascript array, e.g. `[1,2,3]`, and a matrix is simply an array of arrays, in row-major format. e.g. `[[1,2,3],[4,5,6],[7,8,9]]`.",
       "the library follows a \"functional\" paradigm, i.e. functions do not modify inputs and objects do not have methods themselves.",
       "all the functions in the library are under the namespace `LOSHU`, or `lo` in shorthand (e.g. `lo.add(A,B)`), though for the rest of this document the prefix will be ommited for conciseness.",
       "some functions (marked with [wasm]) are also implemented in C++ and ported to web assembly, for (around <b>100x</b>) speed boosts. for how to enable wasm mode (and how to get started in general) please consult the <a href=\"https://github.com/LingDong-/Loshu.js/blob/master/README.md\">README</a>."
