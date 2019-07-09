@@ -15,6 +15,8 @@ var ut = new unittests(lo);
 
 app.use(express.static('docs'));
 
+app.use(function(req, res, next) { res.header("Access-Control-Allow-Origin", "*"); res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); next(); });
+
 express.static.mime.types['wasm'] = 'application/wasm';
 
 app.get('/loshu.js', function(request, response) {
