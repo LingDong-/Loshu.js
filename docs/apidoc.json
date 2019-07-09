@@ -1,0 +1,910 @@
+{
+  ":overview": {
+    "desc":[
+      "In <i>loshu.js</i>, a vector is expressed as a plain javascript array, e.g. `[1,2,3]`, and a matrix is simply an array of arrays, in row-major format. e.g. `[[1,2,3],[4,5,6],[7,8,9]]`.",
+      "the library follows a \"functional\" paradigm, i.e. functions do not modify inputs and objects do not have methods themselves.",
+      "all the functions in the library are under the namespace `LOSHU`, or `lo` in shorthand (e.g. `lo.add(A,B)`), though for the rest of this document the prefix will be ommited for conciseness.",
+      "some functions (marked with [wasm]) are also implemented in C++ and ported to web assembly, for (around <b>100x</b>) speed boosts. for how to enable wasm mode (and how to get started in general) please consult the README."
+    ],
+    "opt":{
+      "assertionlvl" : "assertion level. one of `ASSERTION_NONE`, `ASSERTION_WARN`, `ASSERTION_DEFAULT`, `ASSERTION_THROW`. functions can optionally do basic typechecks on the input, and give different types of response (specified by this option) when a problem is found. set to `ASSERTION_NONE` to disable the feature (and optimise for speed). default is `ASSERTION_DEFAULT`",
+      "termcols" : "width of the terminal in columns. affects how many elements are shown when pretty printing matrices. default is `80`",
+      "usewasm": "whether or not to use Web Assembly acceleration. iff `loshuwasm.js` is detected, this will default to `true`"
+    }
+  },
+  "add": {
+    "desc": "elementwise sum of two vectors or two matrices", 
+    "syn": {
+      "(A, B)": "add matrices `A` and `B`", 
+      "(u, v)": "add vectors `u` and `v`"
+    }, 
+    "ret": "the sum of the operands", 
+    "see": [
+      "sub", 
+      "scale", 
+      "mul", 
+      "matmul", 
+      "cross", 
+      "dot", 
+      "outer"
+    ]
+  }, 
+  "adj": {
+    "desc": "adjugate matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Adjugate_matrix"
+    ], 
+    "syn": {
+      "(A)": "find the adjugate of matrix `A`"
+    }, 
+    "ret": "the adjugate matrix", 
+    "see": [
+      "cofactor", 
+      "minor", 
+      "det", 
+      "inv"
+    ]
+  }, 
+  "affine": {
+    "desc": "create an affine homogeneous transformation matrix from a selection of presets", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Affine_transformation"
+    ], 
+    "syn": {
+      "('rot2d', theta)": "2d rotation by `theta` radians", 
+      "('rotx', theta)": "3d rotation around x axis by `theta` radians", 
+      "('roty', theta)": "3d rotation around y axis by `theta` radians", 
+      "('rotz', theta)": "3d rotation around z axis by `theta` radians", 
+      "('rotaxial', theta, [x,y,z])": "3d rotation by `theta` radians around axis `[x,y,z]`", 
+      "('transl2d', [x,y])": "2d translation with offset `[x,y]`", 
+      "('scale2d', [x,y])": "2d scaling by scale factor `x` and `y` along the axes", 
+      "('scale2d', x)": "2d scaling by scale factor `x` along both axes", 
+      "('scale3d', [x,y,z])": "3d scaling by scale factor `x`, `y` and `z` along the axes", 
+      "('scale3d', x)": "3d scaling by scale factor `x` along all three axes", 
+      "('reflect2d', [x,y])": "2d reflection about axis `[x,y]`", 
+      "('reflect3d', [x,y,z])": "3d reflection about axis `[x,y,z]`"
+    }, 
+    "ret": "the transformation matrix (homogeneous, i.e. if transform is 2d, this will be 3x3; if transform is 3d, this will be 4x4)", 
+    "see": [
+      "transform"
+    ]
+  }, 
+  "approx": {
+    "desc": "check if two matrices or two vectors are identical (within certain average epsilon)", 
+    "syn": {
+      "(A, B, {options})": "check if matrix A is almost identical to B", 
+      "(u, v, {options})": "check if vector u is almost identical to v"
+    }, 
+    "opt": {
+      "epsilon": "maximum average error between elements of the operands for them to be considered identical"
+    }, 
+    "ret": "`true` if the operands are identical, `false` otherwise."
+  }, 
+  "blit": {
+    "desc": "set some elements of a matrix using elements from another`", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Bit_blit"
+    ], 
+    "syn": {
+      "(A, [i0,i1], [j0,j1], B)": "`A[i0:i1,j0:j1] = B`. `[i0,i1]` is the row range and `[j0,j1]` is the column range of `A`."
+    }, 
+    "ret": "the new combined matrix. the original matrices are unchanged", 
+    "see": [
+      "slice", 
+      "clone", 
+      "hsplit", 
+      "hstack"
+    ]
+  }, 
+  "cholesky": {
+    "desc": "cholesky decomposition", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Cholesky_decomposition"
+    ], 
+    "syn": {
+      "(A)": "find the cholesky decomposition of hermitian matrix `A`"
+    }, 
+    "ret": "`[L, L']` where `LL'=A`. `L` is a lower triangular matrix and `L'` its transpose", 
+    "see": [
+      "ldl", 
+      "lup", 
+      "ishermitian", 
+      "qr", 
+      "svd", 
+      "polar"
+    ]
+  }, 
+  "clone": {
+    "desc": "get a deep copy a matrix or a vector", 
+    "syn": {
+      "(A)": "clone the matrix `A`", 
+      "(v)": "clone the vector `v`"
+    }, 
+    "ret": "a new matrix or vector with identitical entries as the input", 
+    "see": [
+      "slice", 
+      "blit", 
+      "hstack", 
+      "hsplit"
+    ]
+  }, 
+  "cofactor": {
+    "desc": "calculate the cofactor of an element in a matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Minor_(linear_algebra)"
+    ], 
+    "syn": {
+      "(A, i, j)": "calculate the (i,j) cofactor of matrix `A`"
+    }, 
+    "ret": "the cofactor (a number)", 
+    "see": [
+      "minor", 
+      "det", 
+      "inv", 
+      "adj"
+    ]
+  }, 
+  "cond": {
+    "desc": "condition number of matrix", 
+    "ref": [ ], 
+    "syn": {
+      "(A)": "calculate condition number of matrix `A` using infinity norm"
+    }, 
+    "ret": "the condition number", 
+    "see": [
+      "norm"
+    ]
+  }, 
+  "cross": {
+    "desc": "cross product of two vectors in three or seven dimensional space", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Cross_product"
+    ], 
+    "syn": {
+      "([x,y,z], [x',y',z'])": "cross product of two 3d vectors", 
+      "([x0,x1,...,x6], [x0',x1',...,x6'])": "cross product of two 7d vectors. by definition the product is not unique, and only one of the possible products is returned"
+    }, 
+    "ret": "the cross product (a vector)", 
+    "see": [
+      "dot", 
+      "outer", 
+      "matmul", 
+      "mul", 
+      "scale"
+    ]
+  }, 
+  "det": {
+    "desc": "determinant of a matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Determinant"
+    ], 
+    "syn": {
+      "(A)": "calculate the determinat of square matrix `A`"
+    }, 
+    "ret": "the determinant (a number)", 
+    "see": [
+      "inv", 
+      "cofactor", 
+      "minor"
+    ]
+  }, 
+  "diagonal": {
+    "desc": "extract the elements on the main diagnonal of a matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Main_diagonal"
+    ], 
+    "syn": {
+      "(A)": "extract diagonal of matrix `A`, i.e. `A[i][j]` where `i == j`."
+    }, 
+    "ret": "a vector containing the diagonal elements", 
+    "see": [
+      "tr", 
+      "iden"
+    ]
+  }, 
+  "dist": {
+    "desc": "euclidean distance between points, lines, and planes in n-dimensional space. ", 
+    "pts": [
+      "a point is denoted by the vector `[x1,x2,...,xn]`", 
+      "a line is denoted by `[o,d]`, where `o=[x1,x2,...xn]` is a point on the line, and `d=[d1,d2,...dn]` is the direction vector (i.e. equation: o + t d)", 
+      "a plane is denoted by `[a1,a2,...,an,d]` where `a1*x1+a2*x2+...+an*xn=d` is the equation of the line"
+    ], 
+    "syn": {
+      "('pt', u, 'pt', v)": "calculate distance between points `u` and `v`", 
+      "('pt', u, 'ln', [o,d])": "calculate distance between point `u` and line `o + t d`", 
+      "('pt', u, 'pl', [a1,a2,...an,d])": "calculate the distance between point `u` and plane `a1*x1+a2*x2+...+an*xn=d`", 
+      "('ln', [o,d], 'pt', u)": "same as `('pt', u, 'ln', [o,d])`", 
+      "('ln', [o1,d1], 'ln', [o2,d2])": "calculate the distance between two lines", 
+      "('ln', [o,d], 'pl', [a1,a2,...an,d])": "calculate the distance between a line and a plane", 
+      "('pl', [a1,a2,...an,d], 'pt', u)": "same as `('pt', u, 'pl', [a1,a2,...an,d])`", 
+      "('pl', [a1,a2,...an,d], 'ln', [o,d])": "same as `('ln', [o,d], 'pl', [a1,a2,...an,d])`", 
+      "('pl', [a1,a2,...an,d], 'pl', [b1,b2,...bn,c])": "calculate distance between two planes"
+    }, 
+    "ret": "the distance (a number)"
+  }, 
+  "dot": {
+    "desc": "dot product of two vectors", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Dot_product"
+    ], 
+    "syn": {
+      "(u, v)": "calculate dot product of vectors `u` and `v`"
+    }, 
+    "ret": "the dot product (a number)", 
+    "see": [
+      "cross", 
+      "scale", 
+      "outer", 
+      "matmul", 
+      "mul"
+    ]
+  }, 
+  "eigen": {
+    "desc": "eigenvalues and eigenvectors of a matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Eigenvalues_and_eigenvectors"
+    ], 
+    "syn": {
+      "(A, {options})": "calculate the eigenpairs of matrix `A`"
+    }, 
+    "opt": {
+      "fancy": "use hessenberg transformation and wilkinson shift to speed up convergence. always `true` when using `wasm` mode", 
+      "maxiter": "maximum number of iterations, larger the slower and the more accurate"
+    }, 
+    "ret": "`[{val:x1, vec:v1}, {val:x2, vec:v2}, ... {val:xn, vec:vn}]` the eigenpairs as an array of objects with fileds `val` (eigenvalue) and `vec` (eigenvector)", 
+    "see": [
+      "svd", 
+      "gerschgorin", 
+      "hessenberg"
+    ]
+  }, 
+  "gauss": {
+    "desc": "gaussian elimination on a matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Gaussian_elimination"
+    ], 
+    "syn": {
+      "(A, B, {options})": "perform gaussian elimination on the augmented matrix `[A|B]` to reduce `A` to row echelon form"
+    }, 
+    "opt": {
+      "jordan": "if `true`, additionally perform gauss-jordan elimination to produce a reduced row echelon form", 
+      "elementary": "if `true`, additionally calculate the elementary matrices from the row operations", 
+      "operators": "an array containing the types of elementary row operations to use: `'s'`(switching rows), `'*'` (multiplying by a constant) and `'+*'` (adding a multiple of another row)"
+    }, 
+    "ret": "`[A', B']` where `[A'|B']` is the resultant matrix. if option `elementary` is set to `true`, returns `[A', B', [E0, E1, E2, ...]]` where `En` is an elementary matrix", 
+    "see": [
+      "gaussjordan"
+    ]
+  }, 
+  "gaussjordan": {
+    "desc": "use gauss-jordan elimination to solve a system of linear equations", 
+    "pts": [
+      "throws `INCONSISTENT` error if the system is inconsistent"
+    ], 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Gaussian_elimination"
+    ], 
+    "syn": {
+      "(M)": "solve linear system denoted by matrix `M`, where `M=[A|b]`, finding `x` where `Ax=b`"
+    }, 
+    "ret": "vector `x`, where `Ax=b`", 
+    "see": [
+      "gauss", 
+      "lsq"
+    ]
+  }, 
+  "gerschgorin": {
+    "desc": "gerschgorin discs for bounding eigenvalues", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Gershgorin_circle_theorem"
+    ], 
+    "syn": {
+      "(A)": "find the gerschgorin discs of matrix `A`"
+    }, 
+    "ret": "`[{o:[x1,y1],r:r1}, {o:[x2,y2],r:r2}, ...]` an array of objects each containing fields `o` (coordinate of disc center on the complex plane) and `r` (radius of disc)", 
+    "see": [
+      "eigen"
+    ]
+  }, 
+  "gramschmidt": {
+    "desc": "gram-schmidt process to find orthonormal basis", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Gram%E2%80%93Schmidt_process"
+    ], 
+    "syn": {
+      "([x1,x2,...,xn])": "construct an orthonormal basis for the subspace `span(x1,x2,...,xn)` where `x1,x2,...,xn` are vectors"
+    }, 
+    "ret": "the orthonormal basis `[v1,v2,...,vn]`, where `v1,v2,...vn` are unit vectors", 
+    "see": [
+      "qr"
+    ]
+  }, 
+  "hasinf": {
+    "desc": "check if matrix, vector or number contains infinite values", 
+    "syn": {
+      "(A)": "check if matrix `A` contains `Infinity` or `-Infinity`", 
+      "(v)": "check if vector `v` contains `Infinity` or `-Infinity`", 
+      "(n)": "check if number `n` is `Infinity` or `-Infinity`"
+    }, 
+    "ret": "a boolean", 
+    "see": [
+      "hasnan"
+    ]
+  }, 
+  "hasnan": {
+    "desc": "check if matrix, vector or number contains `NaN`-like values", 
+    "syn": {
+      "(A)": "check if matrix `A` contains `NaN`, `null` or `undefined`", 
+      "(v)": "check if vector `v` contains `NaN`, `null` or `undefined`", 
+      "(n)": "check if number `n` is `NaN`, `null` or `undefined`"
+    }, 
+    "ret": "a boolean", 
+    "see": [
+      "hasinf"
+    ]
+  }, 
+  "hessenberg": {
+    "desc": "reduce a matrix to upper hessenberg form", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Hessenberg_matrix"
+    ], 
+    "syn": {
+      "(A)": "perform hessenberg reduction on matrix `A`"
+    }, 
+    "ret": "[H,Q] where `H` is a hessenberg matrix and `Q' A Q = H`", 
+    "see": [
+      "eigen"
+    ]
+  }, 
+  "householder": {
+    "desc": "construct householder matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Householder_transformation"
+    ], 
+    "syn": {
+      "(v)": "compute householder matrix defined by vector `v` orthogonal to the hyper plane"
+    }, 
+    "ret": "the householder matrix"
+  }, 
+  "hsplit": {
+    "desc": "horizontally split a matrix into two", 
+    "syn": {
+      "(A, i)": "split matrix `A` at column `i`"
+    }, 
+    "ret": "`[B,C]` where new matrices `B=A[:,0:n]` and `C=A[:,n:]`", 
+    "see": [
+      "hstack"
+    ]
+  }, 
+  "hstack": {
+    "desc": "horizontally combine two matrices into one", 
+    "syn": {
+      "(A, B)": "stack matrices `A` (left) and `B` (right) column-wise"
+    }, 
+    "ret": "the new combined matrix", 
+    "see": [
+      "hsplit"
+    ]
+  }, 
+  "iden": {
+    "desc": "construct an identity matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Identity_matrix"
+    ], 
+    "syn": {
+      "(n)": "generate an `n x n` identity matrix"
+    }, 
+    "ret": "the identity matrix", 
+    "see": [
+      "zeros", 
+      "diagonal"
+    ]
+  }, 
+  "inv": {
+    "desc": "invert a matrix", 
+    "pts": [
+      "if not invertible, throws `SINGULAR` error"
+    ], 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Invertible_matrix"
+    ], 
+    "syn": {
+      "(A, {options})": "compute the inverses of matrix `A`"
+    }, 
+    "opt": {
+      "method": "either `'adjugate'` or `'gaussjordan'`"
+    }, 
+    "ret": "the inverse, `A^-1`", 
+    "see": [
+      "det", 
+      "pinv"
+    ]
+  }, 
+  "ishermitian": {
+    "desc": "check if matrix is hermitian", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Hermitian_matrix"
+    ], 
+    "syn": {
+      "(A)": "check if matrix `A` is hermitian, i.e. equals to its conjugate transpose"
+    }, 
+    "ret": "a boolean", 
+    "see": [
+      "issquare", 
+      "isunitary", 
+      "isperm"
+    ]
+  }, 
+  "ismat": {
+    "desc": "matrix typecheck", 
+    "syn": {
+      "(A)": "check if `A` is a matrix"
+    }, 
+    "ret": "a boolean", 
+    "see": [
+      "isvec", 
+      "isnum"
+    ]
+  }, 
+  "isnum": {
+    "desc": "number typecheck", 
+    "syn": {
+      "(n)": "check if `n` is a number"
+    }, 
+    "ret": "a boolean", 
+    "see": [
+      "ismat", 
+      "isvec"
+    ]
+  }, 
+  "isperm": {
+    "desc": "check if matrix is a permutation matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Permutation_matrix"
+    ], 
+    "syn": {
+      "(A)": "check if matrix `A` is a permutation matrix"
+    }, 
+    "ret": "a boolean"
+  }, 
+  "issquare": {
+    "desc": "check if matrix is square", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Square_matrix"
+    ], 
+    "syn": {
+      "(A)": "check if matrix `A` is square, i.e. same number of rows and columns"
+    }, 
+    "ret": "a boolean"
+  }, 
+  "isunitary": {
+    "desc": "check if matrix is unitary", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Unitary_matrix"
+    ], 
+    "syn": {
+      "(A)": "check if matrix `A` is unitary, i.e. conjugate transpose equals inverse"
+    }, 
+    "ret": "a boolean"
+  }, 
+  "isvec": {
+    "desc": "vector typecheck", 
+    "syn": {
+      "(v)": "check if `v` is a vector"
+    }, 
+    "ret": "a boolean", 
+    "see": [
+      "ismat", 
+      "isnum"
+    ]
+  }, 
+  "ldl": {
+    "desc": "LDL decomposition", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Cholesky_decomposition"
+    ], 
+    "syn": {
+      "(A)": "perform LDL decomposition on matrix `A`"
+    }, 
+    "ret": "`[L,D,L']` where `A=LDL'`", 
+    "see": [
+      "cholesky", 
+      "lup", 
+      "qr", 
+      "polar", 
+      "svd"
+    ]
+  }, 
+  "lsq": {
+    "desc": "least squares approximation", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Least_squares"
+    ], 
+    "syn": {
+      "(A, b, {options})": "find the least squares approximation to `Ax=b` defined by matrix `A` and vector `B` "
+    }, 
+    "opt": {
+      "method": "either `'qr'` or `'gaussjordan'`"
+    }, 
+    "ret": "vector `x`, the least squares solution", 
+    "see": [
+      "lsqfit"
+    ]
+  }, 
+  "lsqfit": {
+    "desc": "fit a curve to data using least squares approximation", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Least_squares"
+    ], 
+    "syn": {
+      "([x1,x2,...,xn], {options})": "fit a polynomial on an array of points (2d vectors)"
+    }, 
+    "opt": {
+      "order": "the order of the polynomial, `1` is linear, `2` is quadratic, etc."
+    }, 
+    "ret": "`[a,b,c,d,...]` the coefficients of the polynomial, `y=a+bx+cx^2+dx^3...`", 
+    "see": [
+      "lsq"
+    ]
+  }, 
+  "lup": {
+    "desc": "LU or LUP decomposition", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/LU_decomposition"
+    ], 
+    "syn": {
+      "(A, {options})": "perform LU or LUP factorization on matrix `A`"
+    }, 
+    "opt": {
+      "p": "if `true`, perform LUP, otherwise LU"
+    }, 
+    "ret": "`[L,U]` where `A=LU`, or `[L,U,P]` where `PA=LU` if option `p` is `true`", 
+    "see": [
+      "cholesky", 
+      "qr", 
+      "svd", 
+      "polar", 
+      "ldl"
+    ]
+  }, 
+  "magic": {
+    "desc": "magic square", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Magic_square"
+    ], 
+    "syn": {
+      "(n)": "generate an `n x n` magic square"
+    }, 
+    "ret": "a magic square (`n x n` matrix)", 
+    "see": [
+      "eigen", 
+      "zeros", 
+      "iden"
+    ]
+  }, 
+  "map": {
+    "desc": "apply a function to each element of a matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Map_(higher-order_function)"
+    ], 
+    "syn": {
+      "(A, f)": "apply function `f(x,i,j)` to each element of matrix `A`, where `x` is the element value, `i` is the row and `j` is the column"
+    }, 
+    "ret": "a new matrix with the function applied", 
+    "see": [
+      "zeros"
+    ]
+  }, 
+  "matmul": {
+    "desc": "matrix multiplication", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Matrix_multiplication"
+    ], 
+    "syn": {
+      "(A, B)": "multiply matrices `A` and `B`"
+    }, 
+    "ret": "the product (a matrix)", 
+    "see": [
+      "mul", 
+      "add", 
+      "sub", 
+      "scale"
+    ]
+  }, 
+  "minor": {
+    "desc": "submatrix from removing one row and one column", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Minor_(linear_algebra)"
+    ], 
+    "syn": {
+      "(A, i, j)": "remove row `i` and column `j` of `A`"
+    }, 
+    "ret": "the submatrix. for the determinant, use `det(minor(A))`.", 
+    "see": [
+      "det", 
+      "cofactor", 
+      "adj"
+    ]
+  }, 
+  "mul": {
+    "desc": "multiply multiple matrices, vectors and numbers", 
+    "syn": {
+      "(x1, x2, x3, ...)": "`((x1*x2)*x3)*...` where `xn` is a number, or a vector, or a matrix. vectors are treated as column vectors when multiplied to matrices."
+    }, 
+    "ret": "the product", 
+    "see": [
+      "matmul", 
+      "scale"
+    ]
+  }, 
+  "ncols": {
+    "desc": "number of rows of a matrix", 
+    "syn": {
+      "(A)": "count the number of rows in matrix `A`"
+    }, 
+    "ret": "a number", 
+    "see": [
+      "ncols", 
+      "size"
+    ]
+  }, 
+  "norm": {
+    "desc": "norm of a vector or a matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Norm_(mathematics)", 
+      "https://en.wikipedia.org/wiki/Matrix_norm"
+    ], 
+    "syn": {
+      "(A)": "frobenius norm of matrix `A`", 
+      "(A, {order:'fro'})": "frobenius norm of matrix `A`", 
+      "(A, {order:'1'})": "1-norm of matirx `A`", 
+      "(A, {order:'inf'})": "inf-norm of matirx `A`", 
+      "(v)": "l2-norm of vector `v`", 
+      "(v, {order:'1'})": "l1-norm of vector `v`", 
+      "(v, {order:'2'})": "l2-norm of vector `v`"
+    }, 
+    "ret": "the norm (a number)", 
+    "see": [
+      "normailze"
+    ]
+  }, 
+  "normalize": {
+    "desc": "normalize a vector", 
+    "ref": [
+      "http://mathworld.wolfram.com/NormalizedVector.html"
+    ], 
+    "syn": {
+      "(v)": "normalize vector `v`, i.e. `v/|v|`"
+    }, 
+    "ret": "a new unit vector with the same direction as `v`", 
+    "see": [
+      "norm"
+    ]
+  }, 
+  "outer": {
+    "desc": "outer product of two vectors", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Outer_product"
+    ], 
+    "syn": {
+      "(u, v)": "calculate the outer product of vector `u` and `v`"
+    }, 
+    "ret": "the product (a matrix)"
+  }, 
+  "pinv": {
+    "desc": "pseudoinverse of a matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Moore%E2%80%93Penrose_inverse"
+    ], 
+    "syn": {
+      "(A)": "calculate the moore-penrose inverse of matrix `A`"
+    }, 
+    "opt": {
+      "method": "either `'direct'` or `'svd'`"
+    }, 
+    "ret": "the inverse (a matrix)", 
+    "see": [
+      "inv", 
+      "svd"
+    ]
+  }, 
+  "polar": {
+    "desc": "polar decomposition", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Polar_decomposition"
+    ], 
+    "syn": {
+      "(A)": "compute the polar decomposition of matrix `A`"
+    }, 
+    "opt": {
+      "method": "either `'direct'` or `'svd'`"
+    }, 
+    "ret": "`[U,P]` where `A=UP` and `U` is unitary and `P` is hermitian", 
+    "see": [
+      "svd", 
+      "qr", 
+      "ldl", 
+      "lup", 
+      "cholesky", 
+      "isunitary", 
+      "ishermitian"
+    ]
+  }, 
+  "print": {
+    "desc": "pretty print matrices", 
+    "syn": {
+      "(x1,x2,x3,...)": "print passed objects to console, matrices are pretty-printed, other types fall back to `console.log`"
+    }, 
+    "ret": "a string containing a copy of what was printed to the console"
+  }, 
+  "proj": {
+    "desc": "vector projection", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Vector_projection"
+    ], 
+    "syn": {
+      "(u, v)": "project vector `v` onto vector `u` (`((u•v)/(u•u))u`)"
+    }, 
+    "ret": "the projected vector"
+  }, 
+  "qr": {
+    "desc": "QR decomposition", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/QR_decomposition"
+    ], 
+    "syn": {
+      "(A, {options})": "compute the QR factorization of `A`"
+    }, 
+    "opt": {
+      "method": "either `'gramschmidt'` or `'householder'`"
+    }, 
+    "ret": "`[Q,R]` where `Q` is orthogonal and `R` is upper triangular and `A=QR`", 
+    "see": [
+      "svd", 
+      "qr", 
+      "ldl", 
+      "lup", 
+      "cholesky", 
+      "polar"
+    ]
+  }, 
+  "rand": {
+    "desc": "random matrix or vector", 
+    "syn": {
+      "(m, n)": "generate `m x n` matrix of random numbers uniformly distributed over `[0, 1]`", 
+      "(n)": "generate an `n`-dimensional vector of random numbers uniformly distributed over `[0, 1]`"
+    }, 
+    "ret": "a random matrix or vector", 
+    "see": [
+      "zeros"
+    ]
+  }, 
+  "rank": {
+    "desc": "rank of a matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Rank_(linear_algebra)"
+    ], 
+    "syn": {
+      "(A)": "compute the rank of matrix `A`"
+    }, 
+    "ret": "the rank (a number)", 
+    "see": [
+      "gauss"
+    ]
+  }, 
+  "scale": {
+    "desc": "scale a matrix or vector by a factor", 
+    "syn": {
+      "(A, s)": "multiply each element of matrix `A` with number `s`", 
+      "(v, s)": "multiply each element of vector `v` with number `s`"
+    }, 
+    "ret": "a new matrix or vector", 
+    "see": [
+      "add", 
+      "sub", 
+      "mul"
+    ]
+  }, 
+  "size": {
+    "desc": "size of a matrix", 
+    "syn": {
+      "(A)": "the size (dimensions) of matrix `A`"
+    }, 
+    "ret": "`[m, n]` where `m` is the number of rows and `n` is the number of columns", 
+    "see": [
+      "nrows", 
+      "ncols"
+    ]
+  }, 
+  "slice": {
+    "desc": "slice (crop) a matrix", 
+    "syn": {
+      "(A, [i0,i1], [j0,j1])": "`A[i0:i1,j0:j1]`. `[i0,i1]` is the row range and `[j0,j1]` is the column range"
+    }, 
+    "ret": "a new matrix containing the cropped region. original matrix is unchanged", 
+    "see": [
+      "blit", 
+      "clone", 
+      "minor", 
+      "hsplit", 
+      "hstack"
+    ]
+  }, 
+  "sub": {
+    "desc": "elementwise subtraction of two vectors or two matrices", 
+    "syn": {
+      "(A, B)": "elementwise difference of matrices `A` and `B` (`A-B`)", 
+      "(u, v)": "elementwise difference of vectors `u` and `v` (`u-v`)"
+    }, 
+    "ret": "a new matrix or vector", 
+    "see": [
+      "add", 
+      "scale"
+    ]
+  }, 
+  "svd": {
+    "desc": "singular value decomposition of a matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Singular_value_decomposition"
+    ], 
+    "syn": {
+      "(A)": "perform singular value decomposition on matrix `A`"
+    }, 
+    "ret": "`[U,S,V]` where `A=USV'` and columns of matrix `U` are left singular vectors and columns of matrix `V` are right singular vectors, and diagonal entries of matrix `S` are the singular values", 
+    "see": [
+      "polar", 
+      "ldl", 
+      "qr", 
+      "lup", 
+      "cholesky"
+    ]
+  }, 
+  "tr": {
+    "desc": "trace of a matrix", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Trace_(linear_algebra)"
+    ], 
+    "syn": {
+      "(A)": "compute the trace (sum of diagonal elements) of matrix `A`"
+    }, 
+    "ret": "the trace (a number)", 
+    "see": [
+      "diagonal"
+    ]
+  }, 
+  "transform": {
+    "desc": "apply a transformation matrix to a vector", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Transformation_matrix"
+    ], 
+    "syn": {
+      "(A, v)": "transform vector `v` using transformation matrix `A`"
+    }, 
+    "ret": "a new vector", 
+    "see": [
+      "affine"
+    ]
+  }, 
+  "transpose": {
+    "desc": "matrix transpose", 
+    "ref": [
+      "https://en.wikipedia.org/wiki/Transpose"
+    ], 
+    "syn": {
+      "(A)": "transpose the matrix `A`. `T(A)` can be used as a shorthand"
+    }, 
+    "ret": "the transposed matrix"
+  }, 
+  "zeros": {
+    "desc": "generate a matrix or vector of zeros", 
+    "syn": {
+      "(m, n)": "generate a `m x n` matrix filled with zeros", 
+      "(n)": "generate an `n`-dimensional vector filled with zeros"
+    }, 
+    "ret": "a new matrix or vector", 
+    "see": [
+      "iden", 
+      "map"
+    ]
+  }
+}
