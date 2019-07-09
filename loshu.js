@@ -33,18 +33,28 @@ var LOSHU = new function(){
   that.IRREDUCIBLE = 'irreducible';
   that.UNFACTORIZABLE = 'unfactorizable';
 
+  var _wasmexist = false;
+  
   var _isnode = typeof module !== 'undefined' && module.exports
   if (_isnode) {
     try{
-      var {_LOSHUWASM,LOSHUWASM} = require('./loshuwasm');
+      let {_LOSHUWASM,LOSHUWASM} = require('./loshuwasm');
+      that.wasm = LOSHUWASM;
+      that._wasm = _LOSHUWASM
+      _wasmexist = true;
     }catch(e){/*no wasm*/}
+  }else{
+    _wasmexist = typeof LOSHUWASM != 'undefined';
+    if (_wasmexist){
+      /*global describe LOSHUWASM _LOSHUWASM*/
+      that.wasm = LOSHUWASM; 
+      that._wasm = _LOSHUWASM;
+    }
   }
   
-  var _wasmexist = typeof LOSHUWASM != 'undefined';
   var _wasmready = false;
   if (_wasmexist){
-    that.wasm = LOSHUWASM;
-    _LOSHUWASM.then(function(){
+    that._wasm.then(function(){
       var msg = "🚀 web assembly backend initialized."
       if (!_isnode) {
         console.log("%c "+msg,"color:lightgreen; background:black");

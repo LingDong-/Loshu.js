@@ -20,7 +20,7 @@ but is also capable of more advanced operations such **matrix decompositions**,
 - Solving linear systems: Gauss-Jordan elimination, Least squares approximation, ...
 - Miscellaneous utilities: affine transformation, n-dimensional point/line/plane distance, ...
 - Pretty print matrices
-- Simple to use, [documented](https://loshu.glitch.me/apidoc.html#lsqfit) interface
+- Simple to use, [documented](https://loshu.glitch.me/apidoc.html) interface
 - Try it out in your browser with the [online REPL](https://loshu.glitch.me)
 - Additional WebAssembly implementation for certain matrix math (C++ → [emscripten](https://emscripten.org/)) for up to **100x** speed boost
 
