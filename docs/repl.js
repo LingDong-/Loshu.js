@@ -46,7 +46,7 @@ function newSheet(){
   
   maindiv.innerHTML = `
     <div style="margin:10px">
-    <i>loshu.js</i> is a linear algebra library for JavaScript.
+    <i>Loshu.js</i> is a linear algebra library for JavaScript.
     It not only provides convienient manipulation of matrices and vectors,
     but is also capable of more advanced operations such matrix decompositions,
     eigenvalue and vectors, solution and approximation to linear systems, and many more!
@@ -185,7 +185,7 @@ function newIn(txt){
 
 
 function newNav(){
-  document.getElementById("nav").innerHTML = `<button>Github</button>&nbsp;<button onclick="window.location.href='/apidoc.html'">API Documentation</button>`
+  document.getElementById("nav").innerHTML = `<button onclick="window.location.href='https://github.com/LingDong-/Loshu.js'">Github</button>&nbsp;<button onclick="window.location.href='/apidoc.html'">API Documentation</button>`
 }
 
 function newRef(){
@@ -196,7 +196,7 @@ function newRef(){
   var tr;
   var idx = 0;
   for (var i = 0; i < keys.length; i++){
-    if (typeof lo[keys[i]] != 'function'){
+    if (typeof lo[keys[i]] != 'function' || keys[i][0] == keys[i][0].toUpperCase()){
       continue;
     }
     if (idx % cols == 0){

@@ -63,7 +63,7 @@ function newDoc(apidoc){
     var tcelll = "font-family:monospace; font-size:18px; font-weight:bold; padding:5px;"
 
     if (fname[0] == ":"){
-      page += `<h1>loshu.js reference</h1>`;
+      page += `<h1>Loshu.js reference</h1>`;
       for (var i = 0; i < f.desc.length; i++){
         page += `<div style="padding:10px">${highlightCode(f.desc[i])}</div>`
       }
@@ -168,11 +168,41 @@ function newDoc(apidoc){
 }
 
 function newNav(){
-  return `<button>Github</button>&nbsp;<button onclick="window.location.href='/'">Online REPL</button>`
+  return `<button onclick="window.location.href='https://github.com/LingDong-/Loshu.js'">Github</button>&nbsp;<button onclick="window.location.href='/'">Online REPL</button>`
 }
 
 
+function newMDListing(){
+  var keys = Object.keys(lo);
+  keys.sort();
+  
+  var table = "";
+  var cols = 4;
+  var tr;
+  var idx = 0;
+  table += "|"
+  for (var i = 0; i < cols; i++){
+    table += " |";
+  }
+  table += "\n|"
+  for (var i = 0; i < cols; i++){
+    table += "-|";
+  }
+  for (var i = 0; i < keys.length; i++){
+    if (typeof lo[keys[i]] != 'function' || keys[i][0] == keys[i][0].toUpperCase()){
+      continue;
+    }
+    if (idx % cols == 0){
+      table += "\n|"
+    }
+    table += `[${keys[i]}()](https://loshu.glitch.me/apidoc.html#${keys[i]})|`
+    idx ++;
+  }
+  return table;
 
+}
+
+console.log(newMDListing())
 var apidoc = JSON.parse(fs.readFileSync("apidoc.json").toString());
 var page = newDoc(apidoc);
 console.log(page);
