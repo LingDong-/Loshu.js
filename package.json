@@ -1,5 +1,5 @@
 {
-  "name": "Loshu.js",
+  "name": "loshu",
   "version": "0.0.1",
   "description": "Linear Algebra for Javascript.",
   "main": "loshu.js",

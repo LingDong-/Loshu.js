@@ -4,7 +4,7 @@
 
 ### Linear Algebra for Javascript
 
-#### [Online REPL](https://loshu.glitch.me) | [API Reference](https://loshu.glitch.me/apidoc.html)
+#### [Online REPL](https://loshu.netlify.com) | [API Reference](https://loshu.netlify.com/apidoc.html)
 
 *Loshu.js* is a linear algebra library for JavaScript.
 It not only provides convienient manipulation of matrices and vectors,
@@ -20,8 +20,8 @@ but is also capable of more advanced operations such as **matrix decompositions*
 - Solving linear systems: Gauss-Jordan elimination, Least squares approximation, ...
 - Miscellaneous utilities: affine transformation, n-dimensional point/line/plane distance, ...
 - Pretty print matrices
-- Simple to use, [documented](https://loshu.glitch.me/apidoc.html) interface
-- Try it out in your browser with the [online REPL](https://loshu.glitch.me)
+- Simple to use, [documented](https://loshu.netlify.com/apidoc.html) interface
+- Try it out in your browser with the [online REPL](https://loshu.netlify.com)
 - Additional WebAssembly implementation for certain matrix math (C++ → [emscripten](https://emscripten.org/)) for up to **100x** speed boost
 
 ## Quick Start
@@ -31,31 +31,31 @@ but is also capable of more advanced operations such as **matrix decompositions*
 To use the library, simply include the following to your html:
 
 ```html
-<script src="https://loshu.glitch.me/loshu.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/loshu/loshu.min.js"></script>
 ```
 
 To enable Web Assembly acceleration of some functionalities such as `eigen()`, `inv()` and `svd()`, include the `loshuwasm.js` script **before** `loshu.js`, like so:
 
 ```html
-<script src="https://loshu.glitch.me/loshuwasm.js"></script>
-<script src="https://loshu.glitch.me/loshu.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/loshu/wasm/dist/loshuwasm.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/loshu/loshu.min.js"></script>
 ```
 
 You will see a `web assembly backend initialized` message in console if the wasm module is detected. Otherwise you can manually turn it on using `lo.options.usewasm=true`.
 
 
-You can also download the scripts from the links above and host them yourself, but you'll also need to [download here](https://loshu.glitch.me/loshuwasm.wasm) the `.wasm` binary and put it in the same folder.
+You can also download the scripts from the links above and host them yourself, but you'll also need to [download here](https://loshu.netlify.com/loshuwasm.wasm) the `.wasm` binary and put it in the same folder.
 
 ### For Node.js
 
-To use the library with node.js, [download](https://loshu.glitch.me/loshu.js) and `require` it like so:
+To use the library with node.js, [download](https://loshu.netlify.com/loshu.js) and `require` it like so:
 
 ```javascript
 const lo = require("./loshu")
 ```
 
-To enable Web Assembly acceleration of some functionalities such as `eigen()`, `inv()` and `svd()`, Download the [wasm binary](https://loshu.glitch.me/loshuwasm.wasm) 
-as well as [the wrapper](https://loshu.glitch.me/loshuwasm.js) and put them under the same folder. You will see a `web assembly backend initialized` message in the console.
+To enable Web Assembly acceleration of some functionalities such as `eigen()`, `inv()` and `svd()`, Download the [wasm binary](https://loshu.netlify.com/loshuwasm.wasm) 
+as well as [the wrapper](https://loshu.netlify.com/loshuwasm.js) and put them under the same folder. You will see a `web assembly backend initialized` message in the console.
 
 ## Examples
 
@@ -80,23 +80,23 @@ let v = lo.transform(M,u);           // apply the transform
 
 | | | | |
 |-|-|-|-|
-|[add()](https://loshu.glitch.me/apidoc.html#add)|[adj()](https://loshu.glitch.me/apidoc.html#adj)|[affine()](https://loshu.glitch.me/apidoc.html#affine)|[approx()](https://loshu.glitch.me/apidoc.html#approx)|
-|[assert()](https://loshu.glitch.me/apidoc.html#assert)|[blit()](https://loshu.glitch.me/apidoc.html#blit)|[cholesky()](https://loshu.glitch.me/apidoc.html#cholesky)|[clone()](https://loshu.glitch.me/apidoc.html#clone)|
-|[cofactor()](https://loshu.glitch.me/apidoc.html#cofactor)|[cond()](https://loshu.glitch.me/apidoc.html#cond)|[cross()](https://loshu.glitch.me/apidoc.html#cross)|[det()](https://loshu.glitch.me/apidoc.html#det)|
-|[diagonal()](https://loshu.glitch.me/apidoc.html#diagonal)|[dist()](https://loshu.glitch.me/apidoc.html#dist)|[dot()](https://loshu.glitch.me/apidoc.html#dot)|[eigen()](https://loshu.glitch.me/apidoc.html#eigen)|
-|[gauss()](https://loshu.glitch.me/apidoc.html#gauss)|[gaussjordan()](https://loshu.glitch.me/apidoc.html#gaussjordan)|[gerschgorin()](https://loshu.glitch.me/apidoc.html#gerschgorin)|[gramschmidt()](https://loshu.glitch.me/apidoc.html#gramschmidt)|
-|[hasinf()](https://loshu.glitch.me/apidoc.html#hasinf)|[hasnan()](https://loshu.glitch.me/apidoc.html#hasnan)|[hessenberg()](https://loshu.glitch.me/apidoc.html#hessenberg)|[householder()](https://loshu.glitch.me/apidoc.html#householder)|
-|[hsplit()](https://loshu.glitch.me/apidoc.html#hsplit)|[hstack()](https://loshu.glitch.me/apidoc.html#hstack)|[iden()](https://loshu.glitch.me/apidoc.html#iden)|[inv()](https://loshu.glitch.me/apidoc.html#inv)|
-|[ishermitian()](https://loshu.glitch.me/apidoc.html#ishermitian)|[ismat()](https://loshu.glitch.me/apidoc.html#ismat)|[isnum()](https://loshu.glitch.me/apidoc.html#isnum)|[isperm()](https://loshu.glitch.me/apidoc.html#isperm)|
-|[issquare()](https://loshu.glitch.me/apidoc.html#issquare)|[isunitary()](https://loshu.glitch.me/apidoc.html#isunitary)|[isvec()](https://loshu.glitch.me/apidoc.html#isvec)|[ldl()](https://loshu.glitch.me/apidoc.html#ldl)|
-|[lsq()](https://loshu.glitch.me/apidoc.html#lsq)|[lsqfit()](https://loshu.glitch.me/apidoc.html#lsqfit)|[lup()](https://loshu.glitch.me/apidoc.html#lup)|[magic()](https://loshu.glitch.me/apidoc.html#magic)|
-|[map()](https://loshu.glitch.me/apidoc.html#map)|[matmul()](https://loshu.glitch.me/apidoc.html#matmul)|[minor()](https://loshu.glitch.me/apidoc.html#minor)|[mul()](https://loshu.glitch.me/apidoc.html#mul)|
-|[ncols()](https://loshu.glitch.me/apidoc.html#ncols)|[norm()](https://loshu.glitch.me/apidoc.html#norm)|[normalize()](https://loshu.glitch.me/apidoc.html#normalize)|[nrows()](https://loshu.glitch.me/apidoc.html#nrows)|
-|[outer()](https://loshu.glitch.me/apidoc.html#outer)|[pinv()](https://loshu.glitch.me/apidoc.html#pinv)|[polar()](https://loshu.glitch.me/apidoc.html#polar)|[print()](https://loshu.glitch.me/apidoc.html#print)|
-|[proj()](https://loshu.glitch.me/apidoc.html#proj)|[qr()](https://loshu.glitch.me/apidoc.html#qr)|[rand()](https://loshu.glitch.me/apidoc.html#rand)|[rank()](https://loshu.glitch.me/apidoc.html#rank)|
-|[scale()](https://loshu.glitch.me/apidoc.html#scale)|[size()](https://loshu.glitch.me/apidoc.html#size)|[slice()](https://loshu.glitch.me/apidoc.html#slice)|[sub()](https://loshu.glitch.me/apidoc.html#sub)|
-|[svd()](https://loshu.glitch.me/apidoc.html#svd)|[tr()](https://loshu.glitch.me/apidoc.html#tr)|[transform()](https://loshu.glitch.me/apidoc.html#transform)|[transpose()](https://loshu.glitch.me/apidoc.html#transpose)|
-|[zeros()](https://loshu.glitch.me/apidoc.html#zeros)|
+|[add()](https://loshu.netlify.com/apidoc.html#add)|[adj()](https://loshu.netlify.com/apidoc.html#adj)|[affine()](https://loshu.netlify.com/apidoc.html#affine)|[approx()](https://loshu.netlify.com/apidoc.html#approx)|
+|[assert()](https://loshu.netlify.com/apidoc.html#assert)|[blit()](https://loshu.netlify.com/apidoc.html#blit)|[cholesky()](https://loshu.netlify.com/apidoc.html#cholesky)|[clone()](https://loshu.netlify.com/apidoc.html#clone)|
+|[cofactor()](https://loshu.netlify.com/apidoc.html#cofactor)|[cond()](https://loshu.netlify.com/apidoc.html#cond)|[cross()](https://loshu.netlify.com/apidoc.html#cross)|[det()](https://loshu.netlify.com/apidoc.html#det)|
+|[diagonal()](https://loshu.netlify.com/apidoc.html#diagonal)|[dist()](https://loshu.netlify.com/apidoc.html#dist)|[dot()](https://loshu.netlify.com/apidoc.html#dot)|[eigen()](https://loshu.netlify.com/apidoc.html#eigen)|
+|[gauss()](https://loshu.netlify.com/apidoc.html#gauss)|[gaussjordan()](https://loshu.netlify.com/apidoc.html#gaussjordan)|[gerschgorin()](https://loshu.netlify.com/apidoc.html#gerschgorin)|[gramschmidt()](https://loshu.netlify.com/apidoc.html#gramschmidt)|
+|[hasinf()](https://loshu.netlify.com/apidoc.html#hasinf)|[hasnan()](https://loshu.netlify.com/apidoc.html#hasnan)|[hessenberg()](https://loshu.netlify.com/apidoc.html#hessenberg)|[householder()](https://loshu.netlify.com/apidoc.html#householder)|
+|[hsplit()](https://loshu.netlify.com/apidoc.html#hsplit)|[hstack()](https://loshu.netlify.com/apidoc.html#hstack)|[iden()](https://loshu.netlify.com/apidoc.html#iden)|[inv()](https://loshu.netlify.com/apidoc.html#inv)|
+|[ishermitian()](https://loshu.netlify.com/apidoc.html#ishermitian)|[ismat()](https://loshu.netlify.com/apidoc.html#ismat)|[isnum()](https://loshu.netlify.com/apidoc.html#isnum)|[isperm()](https://loshu.netlify.com/apidoc.html#isperm)|
+|[issquare()](https://loshu.netlify.com/apidoc.html#issquare)|[isunitary()](https://loshu.netlify.com/apidoc.html#isunitary)|[isvec()](https://loshu.netlify.com/apidoc.html#isvec)|[ldl()](https://loshu.netlify.com/apidoc.html#ldl)|
+|[lsq()](https://loshu.netlify.com/apidoc.html#lsq)|[lsqfit()](https://loshu.netlify.com/apidoc.html#lsqfit)|[lup()](https://loshu.netlify.com/apidoc.html#lup)|[magic()](https://loshu.netlify.com/apidoc.html#magic)|
+|[map()](https://loshu.netlify.com/apidoc.html#map)|[matmul()](https://loshu.netlify.com/apidoc.html#matmul)|[minor()](https://loshu.netlify.com/apidoc.html#minor)|[mul()](https://loshu.netlify.com/apidoc.html#mul)|
+|[ncols()](https://loshu.netlify.com/apidoc.html#ncols)|[norm()](https://loshu.netlify.com/apidoc.html#norm)|[normalize()](https://loshu.netlify.com/apidoc.html#normalize)|[nrows()](https://loshu.netlify.com/apidoc.html#nrows)|
+|[outer()](https://loshu.netlify.com/apidoc.html#outer)|[pinv()](https://loshu.netlify.com/apidoc.html#pinv)|[polar()](https://loshu.netlify.com/apidoc.html#polar)|[print()](https://loshu.netlify.com/apidoc.html#print)|
+|[proj()](https://loshu.netlify.com/apidoc.html#proj)|[qr()](https://loshu.netlify.com/apidoc.html#qr)|[rand()](https://loshu.netlify.com/apidoc.html#rand)|[rank()](https://loshu.netlify.com/apidoc.html#rank)|
+|[scale()](https://loshu.netlify.com/apidoc.html#scale)|[size()](https://loshu.netlify.com/apidoc.html#size)|[slice()](https://loshu.netlify.com/apidoc.html#slice)|[sub()](https://loshu.netlify.com/apidoc.html#sub)|
+|[svd()](https://loshu.netlify.com/apidoc.html#svd)|[tr()](https://loshu.netlify.com/apidoc.html#tr)|[transform()](https://loshu.netlify.com/apidoc.html#transform)|[transpose()](https://loshu.netlify.com/apidoc.html#transpose)|
+|[zeros()](https://loshu.netlify.com/apidoc.html#zeros)|
 
 ## References
 
