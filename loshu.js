@@ -330,6 +330,25 @@ var LOSHU = new function(){
     }
     return A.map(x=>x*s);
   }
+  that.pow = function(A, exponent) {
+    /*Raises every element in `A` to `exponent`*/
+    assert(A,'ismat|isvec','!hasnan');
+    assert(exponent,'isnum','!hasnan');
+
+    if (typeof A[0] != 'number'){
+      return A.map(x=>that.pow(x,exponent));
+    }
+    return A.map(x=>Math.pow(x,exponent));
+  }
+  that.exp = function(A) {
+    /*Computes exp(x) for each element x in A*/
+    assert(A,'ismat|isvec','!hasnan');
+
+    if (typeof A[0] != 'number'){
+      return A.map(x=>that.exp(x));
+    }
+    return A.map(x=>Math.exp(x));
+  }
   that.add = function(A,B){
     assert(A,'ismat|isvec','!hasnan');
     assert(B,'ismat|isvec','!hasnan');
